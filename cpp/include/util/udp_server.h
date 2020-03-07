@@ -2,6 +2,9 @@
 #ifndef DNS_FORWARDER_CPP_INCLUDE_UTIL_UDP_SERVER_
 #define DNS_FORWARDER_CPP_INCLUDE_UTIL_UDP_SERVER_
 #include <sys/socket.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <unistd.h>
 #include <array>
 #include <string>
 namespace util_ns {
@@ -13,8 +16,8 @@ class UdpServer {
   UdpServer(UdpServer&) = delete;
   UdpServer& operator=(const UdpServer&) = delete;
   UdpServer& operator=(UdpServer&&) = delete;
-  int Read(char* buff, int max_data_len);
-  int SendToPeer(char* buff, int send_len);
+  int Read(unsigned char* buff, int max_data_len);
+  int SendToPeer(unsigned char* buff, int send_len);
 
  private:
   void Cleanup();
