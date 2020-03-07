@@ -1,0 +1,29 @@
+//  DNS_FORWADER 2020
+#ifndef DNS_FORWARDER_CPP_INCLUDE_UTIL_UDP_SERVER_
+#define DNS_FORWARDER_CPP_INCLUDE_UTIL_UDP_SERVER_
+#include <sys/socket.h>
+#include <array>
+#include <string>
+namespace util_ns {
+class UdpServer {
+ public:
+  UdpServer(const std::string& serving_ip, std::string serving_port);
+  ~UdpServer();
+  UdpServer() = delete;
+  UdpServer(UdpServer&) = delete;
+  UdpServer& operator=(const UdpServer&) = delete;
+  UdpServer& operator=(UdpServer&&) = delete;
+  int Read(char* buff, int max_data_len);
+  int SendToPeer(char* buff, int send_len);
+
+ private:
+  void Cleanup();
+  std::string serving_ip_{""};
+  std::string serving_port_{""};
+  struct sockaddr_in server_addr_;
+  struct sockaddr_in client_addr_;
+  int socket_fd_{-1};
+};
+}  //  namespace util_ns
+#endif  //  DNS_FORWARDER_CPP_INCLUDE_UTIL_UDP_SERVER_
+
