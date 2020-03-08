@@ -1,7 +1,7 @@
 //  DNS_FORWADER 2020
 #include "util/udp_server.h"
 #include <cstring>
-
+#include <iostream>
 using util_ns::UdpServer;
 
 UdpServer::UdpServer(const std::string& serving_ip, std::string serving_port)
@@ -19,14 +19,16 @@ UdpServer::UdpServer(const std::string& serving_ip, std::string serving_port)
   server_addr_.sin_family = AF_INET;
   server_addr_.sin_port = htons(atoi(serving_port_.c_str()));
   server_addr_.sin_addr.s_addr = inet_addr(serving_ip_.c_str());
-  if (bind(socket_fd_, reinterpret_cast<struct sockaddr*>(&server_addr_), sizeof(server_addr_)) < 0) {
+  if (bind(socket_fd_, (struct sockaddr*)&server_addr_, sizeof(server_addr_)) < 0) {
     perror("bind failed");
     Cleanup();
     exit(1);
   }
 }
 
-UdpServer::~UdpServer() { Cleanup(); }
+UdpServer::~UdpServer() {
+  Cleanup();
+}
 
 void UdpServer::Cleanup() {
   if (socket_fd_ != -1) {
@@ -36,10 +38,19 @@ void UdpServer::Cleanup() {
 }
 
 int UdpServer::Read(unsigned char* buff, int max_data_len) {
-  socklen_t rcv_data_len{0};
-  return recvfrom(socket_fd_, buff, max_data_len, 0, reinterpret_cast<struct sockaddr*>(&client_addr_),&rcv_data_len);
+  int ret = -1;
+  rcv_data_len_ = sizeof(client_addr_);
+  ret = recvfrom(socket_fd_, buff, max_data_len, 0, (struct sockaddr *)&client_addr_,&rcv_data_len_);
+  if (ret < 0) {
+    perror("Server: recvfrom failed");
+  }
+  return ret;
 }
 
-int UdpServer::SendToPeer(unsigned char* buff, int send_len) {
-  return sendto(socket_fd_, buff, send_len, 0, reinterpret_cast<struct sockaddr*>(&client_addr_), sizeof(client_addr_));
+int UdpServer::SendToPeer(unsigned const char* buff, int send_len) {
+  int ret = -1;
+  if ((ret = sendto(socket_fd_, buff, send_len, 0, (struct sockaddr *) &client_addr_, rcv_data_len_))  < 0) {
+    perror("Server: sendto failed");
+  }
+  return ret;
 }

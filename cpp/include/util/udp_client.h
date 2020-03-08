@@ -17,13 +17,13 @@ class UdpClient {
   UdpClient& operator=(const UdpClient&) = delete;
   UdpClient& operator=(UdpClient&&) = delete;
   int Read(unsigned char* buff, int max_data_len);
-  int SendToPeer(unsigned char* buff, int send_len);
+  int SendToPeer(unsigned const char* buff, int send_len);
 
  private:
   void Cleanup();
   std::string server_ip_{""};
   std::string server_port_{""};
-  struct sockaddr_in client_addr_;
+  struct sockaddr_in server_addr_;
   int socket_fd_{-1};
 };
 }  //  namespace util_ns

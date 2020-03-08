@@ -17,14 +17,15 @@ class UdpServer {
   UdpServer& operator=(const UdpServer&) = delete;
   UdpServer& operator=(UdpServer&&) = delete;
   int Read(unsigned char* buff, int max_data_len);
-  int SendToPeer(unsigned char* buff, int send_len);
+  int SendToPeer(unsigned const char* buff, int send_len);
 
  private:
   void Cleanup();
   std::string serving_ip_{""};
   std::string serving_port_{""};
   struct sockaddr_in server_addr_;
-  struct sockaddr_in client_addr_;
+  struct sockaddr client_addr_;
+  socklen_t rcv_data_len_{0};
   int socket_fd_{-1};
 };
 }  //  namespace util_ns

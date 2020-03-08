@@ -1,6 +1,7 @@
 //  DNS_FORWADER 2020
 #include "util/udp_client.h"
 #include <cstring>
+#include <iostream>
 
 using util_ns::UdpClient;
 
@@ -10,13 +11,15 @@ UdpClient::UdpClient(const std::string& server_ip, std::string server_port)
     perror("socket creation failed");
     exit(1);
   }
-  memset((char*)&client_addr_, 0, sizeof(client_addr_));
-  client_addr_.sin_family = AF_INET;
-  client_addr_.sin_port = htons(atoi(server_port_.c_str()));
-  client_addr_.sin_addr.s_addr = inet_addr(server_ip_.c_str());
+  memset((char*)&server_addr_, 0, sizeof(server_addr_));
+  server_addr_.sin_family = AF_INET;
+  server_addr_.sin_port = htons(atoi(server_port_.c_str()));
+  server_addr_.sin_addr.s_addr = inet_addr(server_ip_.c_str());
 }
 
-UdpClient::~UdpClient() { Cleanup(); }
+UdpClient::~UdpClient() {
+  Cleanup();
+}
 
 void UdpClient::Cleanup() {
   if (socket_fd_ != -1) {
@@ -26,10 +29,11 @@ void UdpClient::Cleanup() {
 }
 
 int UdpClient::Read(unsigned char* buff, int max_data_len) {
-  socklen_t rcv_data_len{0};
-  return recvfrom(socket_fd_, buff, max_data_len, 0, reinterpret_cast<struct sockaddr*>(&client_addr_), &rcv_data_len);
+  struct sockaddr remote_addr_;
+  socklen_t rcv_data_len = sizeof(remote_addr_);
+  return recvfrom(socket_fd_, buff, max_data_len, 0, reinterpret_cast<struct sockaddr*>(&remote_addr_), &rcv_data_len);
 }
 
-int UdpClient::SendToPeer(unsigned char* buff, int send_len) {
-  return sendto(socket_fd_, buff, send_len, 0, reinterpret_cast<struct sockaddr*>(&client_addr_), sizeof(client_addr_));
+int UdpClient::SendToPeer(unsigned const char* buff, int send_len) {
+  return sendto(socket_fd_, buff, send_len, 0, reinterpret_cast<struct sockaddr*>(&server_addr_), sizeof(server_addr_));
 }
