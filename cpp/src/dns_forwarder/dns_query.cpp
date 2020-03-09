@@ -1,24 +1,16 @@
 //  DNS_FORWADER 2020
 #include "dns_query.h"
-#include <arpa/inet.h>
-#include <cstring>
-#include <iostream>
-using dns_forwarder::DnsQuery;
+using dns_forwarder_ns::DnsQuery;
 
-DnsQuery::DnsQuery(const unsigned char* buff_data, int buff_len) {
-  if (buff_len > kDnsQueryMaxSize) {
-    throw std::length_error{"buffer length error"};
-  }
-  memcpy(buffer_.data(), buff_data, sizeof(unsigned char)* buff_len);
+DnsQuery::DnsQuery(std::shared_ptr<Buffer> buffer) : DnsMessageBase(buffer){
   Parse();
 }
 
 void DnsQuery::Parse() {
- packet_.transaction_id_ = buffer_[0];
- packet_.transaction_id_ = packet_.transaction_id_ << 8;
- packet_.transaction_id_ |=  buffer_[1];  //  ToDo (Daya) consider ntohs ?
+memset(&packet_,0,sizeof(packet_));
+packet_.transaction_id = ParseTransactionId();
 }
 
 uint16_t DnsQuery::TransactionId() {
-  return packet_.transaction_id_;
+  return packet_.transaction_id;
 }

@@ -1,21 +1,21 @@
 //  DNS_FORWADER 2020
-#ifndef DNS_FORWARDER_CPP_SRC_DNS_FORWARDER_DNS_QUERY_
-#define DNS_FORWARDER_CPP_SRC_DNS_FORWARDER_DNS_QUERY_
-#include <array>
-static const int kDnsQueryMaxSize = 1024;  // ToDo (Daya) -- Find out the appropriate
-                                           //size     from spec
-namespace dns_forwarder {
+#ifndef DNS_FORWARDER_CPP_SRC_DNS_FORWARDER_DNS_QUERY_H_
+#define DNS_FORWARDER_CPP_SRC_DNS_FORWARDER_DNS_QUERY_H_
+#include "dns_message_base.h"
+#include <memory>
+using dns_forwarder_ns::DnsMessageBase;
+namespace dns_forwarder_ns {
 struct QueryPacket {
-  uint16_t transaction_id_;
+  uint16_t transaction_id;
+  // Place holder for extendablility transaction is accessed via base class
 };
-class DnsQuery {
+class DnsQuery : public DnsMessageBase {
  public: 
-  DnsQuery(const unsigned char* buff_data, int buff_len);
+  DnsQuery(std::shared_ptr<Buffer> buffer);
   uint16_t TransactionId();
  private:
-  void Parse();
-  std::array<unsigned char, kDnsQueryMaxSize> buffer_;
+  virtual void Parse() override;
   QueryPacket packet_;
 };
-}  //  namespcace dns_forwarder
-#endif  //  DNS_FORWARDER_CPP_SRC_DNS_FORWARDER_DNS_QUERY_
+}  //  namespcace dns_forwarder_ns
+#endif  //  DNS_FORWARDER_CPP_SRC_DNS_FORWARDER_DNS_QUERY_H_

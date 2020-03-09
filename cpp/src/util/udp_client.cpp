@@ -34,12 +34,19 @@ void UdpClient::Cleanup() {
   socket_fd_ = -1;
 }
 
-int UdpClient::Read(unsigned char* buff, int max_data_len) {
+int UdpClient::Read(std::shared_ptr<Buffer> buffer) {
   struct sockaddr remote_addr_;
   socklen_t rcv_data_len = sizeof(remote_addr_);
-  return recvfrom(socket_fd_, buff, max_data_len, 0, reinterpret_cast<struct sockaddr*>(&remote_addr_), &rcv_data_len);
+  int ret = recvfrom(socket_fd_, buffer->buffer_.data(), util_ns::kMsgMaxSize, 0, reinterpret_cast<struct sockaddr*>(&remote_addr_), &rcv_data_len);
+  if (ret < 0) {
+    perror("Client read failed");
+    buffer->BuffeLen(0);
+  } else {
+    buffer->BuffeLen(ret);
+  }
+  return ret;
 }
 
-int UdpClient::SendToPeer(unsigned const char* buff, int send_len) {
-  return sendto(socket_fd_, buff, send_len, 0, reinterpret_cast<struct sockaddr*>(&server_addr_), sizeof(server_addr_));
+int UdpClient::SendToPeer(std::shared_ptr<Buffer> buffer) {
+  return sendto(socket_fd_, buffer->buffer_.data(), buffer->buff_len_, 0, reinterpret_cast<struct sockaddr*>(&server_addr_), sizeof(server_addr_));
 }

@@ -1,8 +1,0 @@
-//  DNS_FORWADER 2020
-#ifndef DNS_FORWARDER_CPP_SRC_DNS_FORWARER_UPSTREAM_CLIENT_
-#define DNS_FORWARDER_CPP_SRC_DNS_FORWARER_UPSTREAM_CLIENT_
-namespace dns_forwarder_ns {
-    
-}  //  namespace dns_forwarder_ns
-
-#endif  //  DNS_FORWARDER_CPP_SRC_DNS_FORWARER_UPSTREAM_CLIENT_
