@@ -16,7 +16,7 @@ class UdpServerClientTest : public ::testing::Test {
  public:
   UdpServerClientTest() {
     udp_server_ = std::unique_ptr<UdpServer>(new UdpServer(server_ip, port));
-    udp_client_ = std::unique_ptr<UdpClient>(new UdpClient(server_ip, port));
+    udp_client_ = std::unique_ptr<UdpClient>(new UdpClient(server_ip, port, 1));
   }
  protected:
   std::unique_ptr<UdpServer> udp_server_;

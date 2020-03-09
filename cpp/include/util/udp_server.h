@@ -10,7 +10,7 @@
 namespace util_ns {
 class UdpServer {
  public:
-  UdpServer(const std::string& serving_ip, std::string serving_port);
+  UdpServer(const std::string& serving_ip, const std::string& serving_port);
   ~UdpServer();
   UdpServer() = delete;
   UdpServer(UdpServer&) = delete;

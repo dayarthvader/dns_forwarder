@@ -5,11 +5,17 @@
 
 using util_ns::UdpClient;
 
-UdpClient::UdpClient(const std::string& server_ip, std::string server_port)
+UdpClient::UdpClient(const std::string& server_ip, const std::string& server_port, const int wait_time_sec)
     : server_ip_(server_ip), server_port_(server_port) {
   if ((socket_fd_ = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
     perror("socket creation failed");
     exit(1);
+  }
+  struct timeval tv;
+  tv.tv_sec = wait_time_sec;
+  tv.tv_usec = 0;
+  if (setsockopt(socket_fd_, SOL_SOCKET, SO_RCVTIMEO,&tv,sizeof(tv)) < 0) {
+    perror("Error");
   }
   memset((char*)&server_addr_, 0, sizeof(server_addr_));
   server_addr_.sin_family = AF_INET;

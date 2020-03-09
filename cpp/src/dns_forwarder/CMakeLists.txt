@@ -1,0 +1,1 @@
+add_library(dns_forwarder STATIC dns_query.cpp)

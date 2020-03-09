@@ -10,7 +10,7 @@
 namespace util_ns {
 class UdpClient {
  public:
-  UdpClient(const std::string& server_ip, std::string server_port);
+  UdpClient(const std::string& server_ip, const std::string& server_port, const int wait_time_sec);
   ~UdpClient();
   UdpClient() = delete;
   UdpClient(UdpClient&) = delete;

@@ -8,6 +8,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIR ${CMAKE_BINARY_DIR})
 set(CMAKE_LIBRARY_OUTPUT_DIR ${CMAKE_BINARY_DIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIR ${CMAKE_BINARY_DIR})
 include_directories("${PROJECT_SOURCE_DIR}/include/")
+include_directories("${PROJECT_SOURCE_DIR}/src/")
 
 add_subdirectory("src/dns_forwarder")
 add_subdirectory("src/util")

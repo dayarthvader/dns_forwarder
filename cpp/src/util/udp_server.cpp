@@ -4,7 +4,7 @@
 #include <iostream>
 using util_ns::UdpServer;
 
-UdpServer::UdpServer(const std::string& serving_ip, std::string serving_port)
+UdpServer::UdpServer(const std::string& serving_ip, const std::string& serving_port)
     : serving_ip_(serving_ip), serving_port_(serving_port) {
   if ((socket_fd_ = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
     perror("socket creation failed");
@@ -12,7 +12,7 @@ UdpServer::UdpServer(const std::string& serving_ip, std::string serving_port)
   }
   int so_addr_reuse = 1;
   if ((setsockopt(socket_fd_, SOL_SOCKET, SO_REUSEADDR,&so_addr_reuse,sizeof(so_addr_reuse) )) < 0) {
-    perror("setsocopt creation failed");
+    perror("setsocopt SO_REUSEADDR failed");
     exit(1);
   }
   memset((char*)&server_addr_, 0, sizeof(server_addr_));
