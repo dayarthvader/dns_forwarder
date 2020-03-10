@@ -8,6 +8,7 @@ namespace dns_forwarder_ns {
 struct ResponsePacket {
   uint16_t transaction_id;
   uint16_t flags;
+  // Place holder for extendablility transaction is accessed via base class
 };
 class DnsResponse : public DnsMessageBase{
  public: 

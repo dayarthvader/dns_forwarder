@@ -1,1 +1,1 @@
-add_library(util STATIC udp_client.cpp udp_server.cpp)
+add_library(util STATIC udp_client.cpp udp_server.cpp ip_util.cpp)
