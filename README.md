@@ -21,7 +21,7 @@ sudo cp *.a /usr/lib
   mkdir build/  
   cd build/  
   cmake ..  
-  make -j`nproc`  
+  make -j\`nproc\`  
   cd output/  
   ./dns_forwarder <upstream_server_ip> <upstream_server_port>  
 
@@ -30,7 +30,7 @@ sudo cp *.a /usr/lib
   mkdir build/  
   cd build/  
   cmake .. -DUNITTEST=1  
-  make -j`nproc`  
+  make -j\`nproc\`  
   cd output/  
   ./dns_forwarder_test  
 
