@@ -4,15 +4,18 @@
 #include "dns_message_base.h"
 #include <memory>
 using dns_forwarder_ns::DnsMessageBase;
+
 namespace dns_forwarder_ns {
 struct QueryPacket {
   uint16_t transaction_id;
   // Place holder for extendablility transaction is accessed via base class
 };
+
 class DnsQuery : public DnsMessageBase {
  public: 
   DnsQuery(std::shared_ptr<Buffer> buffer);
   uint16_t TransactionId();
+
  private:
   virtual void Parse() override;
   QueryPacket packet_;

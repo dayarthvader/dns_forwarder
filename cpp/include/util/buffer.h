@@ -2,6 +2,7 @@
 #ifndef DNS_FORWARDER_CPP_INCLUDE_UTIL_BUFFER_H_
 #define DNS_FORWARDER_CPP_INCLUDE_UTIL_BUFFER_H_
 #include <array>
+
 namespace util_ns {
  static const int kMsgMaxSize = 1024;  // ToDo  (Daya)
                                        // Dimention this for queries with multiple     questions

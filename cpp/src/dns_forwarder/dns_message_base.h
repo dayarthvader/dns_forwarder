@@ -12,6 +12,7 @@ class DnsMessageBase {
  public:
   DnsMessageBase(std::shared_ptr<Buffer> buffer);
   std::shared_ptr<Buffer> Data() {return buffer_;}
+  
  protected:
   uint16_t ParseTransactionId();
   std::shared_ptr<Buffer> buffer_;

@@ -20,10 +20,12 @@ namespace dns_forwarder_ns {
   static const std::string kServerIp{"127.0.0.1"};
   static const std::string kServerPort{"9000"};
   static const int kUpStreamTimeoutSecs = 5;
+
 class QueryServer {
  public:
   QueryServer(const std::string& upstream_server_ip, const std::string& upstream_server_port);
   void Serve();
+  
  private:
   void Prepare();
   std::shared_ptr<UdpClient> udp_client_{nullptr};

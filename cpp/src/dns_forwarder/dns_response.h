@@ -4,17 +4,20 @@
 #include "dns_message_base.h"
 #include <array>
 using dns_forwarder_ns::DnsMessageBase;
+
 namespace dns_forwarder_ns {
 struct ResponsePacket {
   uint16_t transaction_id;
   uint16_t flags;
   // Place holder for extendablility transaction is accessed via base class
 };
+
 class DnsResponse : public DnsMessageBase{
  public: 
   DnsResponse(std::shared_ptr<Buffer> buffer);
   uint16_t TransactionId();
   bool Error();
+  
  private:
   virtual void Parse() override;
   uint16_t ParseFlags();

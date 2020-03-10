@@ -3,6 +3,7 @@
 #include <iostream>
 #include "util/buffer.h"
 using util_ns::Buffer;
+
 namespace dns_forwarder_ns {
 namespace upstream_ns {
 std::shared_ptr<DnsResponse> Forward(std::shared_ptr<UdpClient> udpclient, std::shared_ptr<DnsQuery> query) {
