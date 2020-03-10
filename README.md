@@ -34,4 +34,7 @@ sudo cp *.a /usr/lib
   cd output/  
   ./dns_forwarder_test  
 
-
+# ToDo
+1. Scale for handling concurrent client requests  
+2. Transaction record maintenence policy  
+3. Dimention the buffer sizes to accomodate maximum request and response possible  
