@@ -37,10 +37,10 @@ void UdpServer::Cleanup() {
   socket_fd_ = -1;
 }
 
-int UdpServer::Read(std::shared_ptr<Buffer> buffer) {
+int UdpServer::Read(std::shared_ptr<Buffer> buffer, struct sockaddr* client_addr) {
   int ret = -1;
-  rcv_data_len_ = sizeof(client_addr_);
-  ret = recvfrom(socket_fd_, buffer->buffer_.data(), util_ns::kMsgMaxSize, 0, (struct sockaddr *)&client_addr_,&rcv_data_len_);
+  socklen_t rcv_data_len = sizeof(*client_addr);
+  ret = recvfrom(socket_fd_, buffer->buffer_.data(), util_ns::kMsgMaxSize, 0, (struct sockaddr *) client_addr, &rcv_data_len);
   if (ret < 0) {
     perror("Server: recvfrom failed");
     buffer->BuffeLen(0);
@@ -52,9 +52,9 @@ int UdpServer::Read(std::shared_ptr<Buffer> buffer) {
   return ret;
 }
 
-int UdpServer::SendToPeer(std::shared_ptr<Buffer> buffer) {
+int UdpServer::SendToPeer(std::shared_ptr<Buffer> buffer, struct sockaddr* client_addr) {
   int ret = -1;
-  if ((ret = sendto(socket_fd_, buffer->buffer_.data(), buffer->buff_len_, 0, (struct sockaddr *) &client_addr_, rcv_data_len_))  < 0) {
+  if ((ret = sendto(socket_fd_, buffer->buffer_.data(), buffer->buff_len_, 0, (struct sockaddr *) client_addr, sizeof(*client_addr)))  < 0) {
     perror("Server: sendto failed");
   }
   return ret;

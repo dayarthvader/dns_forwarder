@@ -9,7 +9,6 @@
 #include <memory>
 #include <string>
 #include "buffer.h"
-
 namespace util_ns {
 class UdpClient {
  public:
