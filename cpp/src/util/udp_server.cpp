@@ -19,7 +19,7 @@ UdpServer::UdpServer(const std::string& serving_ip, const std::string& serving_p
   server_addr_.sin_family = AF_INET;
   server_addr_.sin_port = htons(atoi(serving_port_.c_str()));
   server_addr_.sin_addr.s_addr = inet_addr(serving_ip_.c_str());
-  if (bind(socket_fd_, (struct sockaddr*)&server_addr_, sizeof(server_addr_)) < 0) {
+  if (bind(static_cast<int>(socket_fd_), (struct sockaddr*)&server_addr_, sizeof(server_addr_)) < 0) {
     perror("bind failed");
     Cleanup();
     exit(1);
@@ -37,10 +37,10 @@ void UdpServer::Cleanup() {
   socket_fd_ = -1;
 }
 
-int UdpServer::Read(std::shared_ptr<Buffer> buffer) {
+int UdpServer::Read(std::shared_ptr<Buffer> buffer, std::shared_ptr<struct sockaddr> client_addr) {
   int ret = -1;
-  rcv_data_len_ = sizeof(client_addr_);
-  ret = recvfrom(socket_fd_, buffer->buffer_.data(), util_ns::kMsgMaxSize, 0, (struct sockaddr *)&client_addr_,&rcv_data_len_);
+  socklen_t rcv_data_len = sizeof(struct sockaddr);
+  ret = recvfrom(socket_fd_, buffer->buffer_.data(), util_ns::kMsgMaxSize, 0, (struct sockaddr *)client_addr.get(),&rcv_data_len);
   if (ret < 0) {
     perror("Server: recvfrom failed");
     buffer->BuffeLen(0);
@@ -52,9 +52,9 @@ int UdpServer::Read(std::shared_ptr<Buffer> buffer) {
   return ret;
 }
 
-int UdpServer::SendToPeer(std::shared_ptr<Buffer> buffer) {
+int UdpServer::SendToPeer(std::shared_ptr<Buffer> buffer, std::shared_ptr<struct sockaddr> client_addr) {
   int ret = -1;
-  if ((ret = sendto(socket_fd_, buffer->buffer_.data(), buffer->buff_len_, 0, (struct sockaddr *) &client_addr_, rcv_data_len_))  < 0) {
+  if ((ret = sendto(socket_fd_, buffer->buffer_.data(), buffer->buff_len_, 0, (struct sockaddr *) client_addr.get(), sizeof(struct sockaddr)))  < 0) {
     perror("Server: sendto failed");
   }
   return ret;

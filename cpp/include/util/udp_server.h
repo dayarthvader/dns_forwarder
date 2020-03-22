@@ -5,6 +5,7 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <unistd.h>
+#include <atomic>
 #include <array>
 #include <memory>
 #include <string>
@@ -19,17 +20,15 @@ class UdpServer {
   UdpServer(UdpServer&) = delete;
   UdpServer& operator=(const UdpServer&) = delete;
   UdpServer& operator=(UdpServer&&) = delete;
-  int Read(std::shared_ptr<Buffer> buffer);
-  int SendToPeer(std::shared_ptr<Buffer> buffer);
+  int Read(std::shared_ptr<Buffer> buffer, std::shared_ptr<struct sockaddr> client_addr);
+  int SendToPeer(std::shared_ptr<Buffer> buffer, std::shared_ptr<struct sockaddr> client_addr);
 
  private:
   void Cleanup();
   std::string serving_ip_{""};
   std::string serving_port_{""};
   struct sockaddr_in server_addr_;
-  struct sockaddr client_addr_;
-  socklen_t rcv_data_len_{0};
-  int socket_fd_{-1};
+  std::atomic<int> socket_fd_{-1};
 };
 }  //  namespace util_ns
 #endif  //  DNS_FORWARDER_CPP_INCLUDE_UTIL_UDP_SERVER_H_
