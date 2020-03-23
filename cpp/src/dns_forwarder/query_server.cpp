@@ -35,6 +35,7 @@ void QueryServer::Serve() {
 
     std::shared_ptr<DnsQuery> dns_query = std::make_shared<DnsQuery>(request_buffer);
     uint16_t tx_id = dns_query->TransactionId();
+    std::cout << "Query with "<< tx_id << "\n"; 
     if (transaction_history_.find(tx_id) != transaction_history_.end()) {
       std::cout << "Duplicate transaction Detected!\n";
       continue;

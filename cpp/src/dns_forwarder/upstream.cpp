@@ -7,7 +7,6 @@ using dns_forwarder_ns::UpstreamForwarder;
 const int UpstreamForwarder::kUpStreamTimeoutSecs = 5;
 
 void UpstreamForwarder::Process() {
-  std::cout << query_->TransactionId() << " fowarding" << std::this_thread::get_id() << "\n";
   int ret = udp_client_->SendToPeer(query_->Data());
   if (ret < 0) {
     std::cout << "Failed forwarding request upstream\n";
@@ -20,7 +19,6 @@ void UpstreamForwarder::Process() {
     return;
   }
   DnsResponse dns_response(buffer);
-  std::cout << dns_response.TransactionId() << " upstream response received\n";
     if (dns_response.Error()) {
       std::cout << "Error DNS response of" << dns_response.TransactionId() << "\n";
     }
@@ -28,7 +26,7 @@ void UpstreamForwarder::Process() {
     if (reply_context_->SendToPeer(dns_response.Data(), client_addr_) < 0) {
         std::cout << "Server Send failed\n";
     }
-  std::cout << dns_response.TransactionId() << " response sent downstream" << std::this_thread::get_id() << "\n";
+  std::cout << dns_response.TransactionId() << " response sent downstream\n";
 }
 
 std::future<void> UpstreamForwarder::Forward() {
